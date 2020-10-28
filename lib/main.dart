@@ -7,16 +7,14 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       home: Second(),
-      routes: <String, WidgetBuilder> {
+      theme: ThemeData(primarySwatch: Colors.red),
+      routes: <String, WidgetBuilder>{
         STACK: (BuildContext context) => Second()
       },
     );
   }
-
 }
