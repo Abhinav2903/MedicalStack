@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medstack/database_helper.dart';
 
 class Second extends StatefulWidget {
   // Second({Key key}) : super(key: key);
@@ -7,8 +8,8 @@ class Second extends StatefulWidget {
 }
 
 class Mstack extends State<Second> {
-  final List<String> items = <String>["one", 'two'];
-  final List<String> quantity = <String>["1", "2"];
+  final List<String> items = <String>[];
+  final List<String> quantity = <String>[];
   TextEditingController nameController = TextEditingController();
   TextEditingController quantController = TextEditingController();
 
@@ -17,9 +18,31 @@ class Mstack extends State<Second> {
     super.initState();
   }
 
+  _read() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    int rowId = 1;
+    Word word = await helper.queryWord(rowId);
+    if (word == null) {
+      print('read row $rowId: empty');
+    } else {
+      print('read row $rowId: ${word.med} ${word.frequency}');
+    }
+  }
+
+  _save() async {
+    Word word = Word();
+    word.med = items.first;
+    word.frequency = int.parse(quantity.first);
+    DatabaseHelper helper = DatabaseHelper.instance;
+    int id = await helper.insert(word);
+    print('inserted row: $id');
+  }
+
   void append() {
     items.insert(0, nameController.text);
     quantity.insert(0, quantController.text);
+    _read();
+    _save();
   }
 
   void additem() {
